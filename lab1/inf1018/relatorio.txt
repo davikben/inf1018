@@ -1,0 +1,56 @@
+4.a)
+funcionamento do programa:
+int argc = quantidade de argumentos
+char **argv = array em que cada elemento é um argumento
+
+na linha de comando, cada palavra é um argumento. Exemplo: "./ex1 4.0"
+./ex1   -> 1º argumento
+4.0     -> 2º argumento
+
+o programa inicia com um if que verifica quantos argumentos foram escritos no terminal ao executar o código.
+Caso só tenha 1 (ex: "./ex1"), ele printa na tela um tutorial dizendo como deve ser executado.
+
+Caso tenha os 2, ele pega o 2º argumento (que deve ser um numero float) e passa na função foo(pf) que incrementa o valor float digitado em +1.0.
+
+ele printa:
+foo(valor argumento digitado*): return de foo(pf)
+
+4.b)
+rodou normal
+
+4.c)
+apareceu um erro gigantesco:
+
+ex3.c: In function ‘main’:
+ex3.c:11:35: warning: implicit declaration of function ‘foo’ [-Wimplicit-function-declaration]
+   11 |   printf ("foo(%.2f): %.2f\n", f, foo(f));
+      |                                   ^~~
+ex3.c:11:26: warning: format ‘%f’ expects argument of type ‘double’, but argument 3 has type ‘int’ [-Wformat=]
+   11 |   printf ("foo(%.2f): %.2f\n", f, foo(f));
+      |                       ~~~^        ~~~~~~
+      |                          |        |
+      |                          double   int
+      |                       %.2d
+
+justamente falando da falta da função foo()
+
+Ao fazer a união de ex3.0 e labaux.o, rodou, mas com erro de lógica. Agora, mesmo passando um float no 2º argumento, parece que não é enviado nada pro foo() acrescentar, porque sempre aparece no terminal:
+"foo(valor argumento digitado*): 0.00"
+
+5)
+A função dump() recebe o ponteiro para a variável e o número de bytes que ela ocupa na memória
+
+o while(n--) diminui o valor de sizeof a cada iteração do loop. Uma variável de sizeof() = 1 só rodará 1 vez e assim por diante
+
+c1 = 1 retornou 1 pois o 1 sem '' é apenas o número 1. Isso ocupa 1 byte na memória
+c2 = '1' retornou 49 pois o caractere 1 na tabela ASCII ocupa a representa o valor 49. Isso ocupa 1 byte na memória
+
+i = 1 retornou 1 0 0 0, pois:
+1º - um int ocupa 4 bytes na memória, por isso 4 iterações.
+2º - o int 1 representa o os bytes 01 00 00 00 na memória (em litle-endian)
+3º - ao fazer p1++, o ++ fez apontar para o PRÓXIMO endereço de memória. Por isso depois de 1 começa a aparecer só 0, pois dentro dos próximos bytes só tem 0.
+
+v[] = "1" retornou 49 0, pois:
+1º - Isso ocupa 2 bytes na memória pois uma string vale número_caracteres + 1 byte pro caractere '\0' (que representa o final da string)
+2º - o caractere 1 na tabela ASCII representa o valor 49.
+3º - mesma coisa da 3ª do int i.
