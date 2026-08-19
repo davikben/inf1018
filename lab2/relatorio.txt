@@ -1,0 +1,109 @@
+1.a)
+Ao rodar, o dump e a main, obtive 4 linhas printadas. A primeira parte de cada linha é aleatória (com exceção dos úlitmos 4 números que são sucessor do anterior por estarem um do lado do outro na memória), já a segunda parte é sempre:
+10
+27
+00
+00
+Isso são os valores em cada byte do int. Um int tem 4 bytes, por isso temos 4 linhas.
+Esses bytes estão armazenados do menor byte para o maior (little-endian).
+Ao converter isso para decimal:
+10 27 -> 27 10 (ORDEM QUE LEMOS) -> (2 * 16^3) + (7 * 16^2) + (1 * 16^1) + (0 * 16^0) = 8192 + 1792 + 16 + 0 = 10.000
+
+1.b)
+Ao usar uma variável do tipo long, apenas temos o dobro de bytes (já que um long int tem 8 bytes).
+0x7ffcf4be5080 - 10
+0x7ffcf4be5081 - 27
+0x7ffcf4be5082 - 00
+0x7ffcf4be5083 - 00
+0x7ffcf4be5084 - 00
+0x7ffcf4be5085 - 00
+0x7ffcf4be5086 - 00
+0x7ffcf4be5087 - 00
+
+1.c)
+Ao usar uma variável do tipo short, temos apenas 2 bytes:
+0x7ffcf4be507a - 10
+0x7ffcf4be507b - 27
+
+1.d)
+Ao experimentar char a = 'a', se obtem:
+0x7ffe28305029 - 61
+Apenas 1 bye, pois char vale 1 byte na memória. Ao converter o 61 de hexadecimal para decimal, se tem:
+(6 * 16^1) + (1 * 16^0)
+96 + 1 = 97
+
+97 é justamente o código ASCII de "a".
+
+Ao testar com char a2 = 97 também obtem 61
+0x7ffc64a9abc9 - 61
+
+1.e)
+Ao testar char p[] = "davi" e 5 bytes - 1 byte para cada letra e o último byte para o '\0' que serve para indicar o final da string.
+0x7ffc38cf3923 - 64
+0x7ffc38cf3924 - 61
+0x7ffc38cf3925 - 76
+0x7ffc38cf3926 - 69
+0x7ffc38cf3927 - 00
+Vale lembrar que esses números estão em hexadecimal, então antes de ir na tabela ASCII é necessário converter cada um para decimal.
+64 - (6 * 16^1) + (4 * 16^0)
+96 + 4 = 100    -> 'd' na tabela ASCII
+
+61 - (6 * 16^1) + (1 * 16^0)
+96 + 1 = 97     -> 'a' na tabela ASCII
+
+76 - (7 * 16^1) + (6 * 16^0)
+112 + 6 = 118   -> 'v' na tabela ASCII
+
+69 - (6 * 16^1) + (9 * 16^0)
+96 + 9 = 105    -> 'i' na tabela ASCII
+
+char p2[] = "A \n$";
+char p2[]:
+0x7ffe83bd4b03 - 41
+0x7ffe83bd4b04 - 20
+0x7ffe83bd4b05 - 0a
+0x7ffe83bd4b06 - 24
+0x7ffe83bd4b07 - 00
+
+41 - (4 * 16^1) + (1 * 16^0)
+64 + 1 = 65    -> 'A' na tabela ASCII
+
+20 - (2 * 16^1) + (0 * 16^0)
+32 + 0 = 32    -> ' ' na tabela ASCII
+
+0a - (0 * 16^1) + (a * 16^0)
+0 + 10 = 10    -> '\n' na tabela ASCII
+
+24 - (2 * 16^1) + (4 * 16^0)
+32 + 4 = 36    -> '$' na tabela ASCII
+
+2.a)
+decimal   ASCII
+0         48
+1         49
+2         50
+3         51
+4         52
+5         53
+6         54
+7         55
+8         56
+9         57
+perceba como depois do 0, subtrair o código ASCII do número desejado pelo código do 0 te dá o número em si. Isso porque a distância entre o código do número e o do zero representa o número em si.
+(*s - '0') faz justamente isso
+
+*s acessa o primeiro byte do char[] (te dando também o código).
+s++ vai para o próximo byte
+a*10 corrige as bases decimais do número
+
+2.b)
+
+
+2.c)
+
+
+EXTRA:
+
+1)
+
+2)
