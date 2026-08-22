@@ -97,12 +97,49 @@ s++ vai para o próximo byte
 a*10 corrige as bases decimais do número
 
 2.b)
+a unica alteração feita foi trocar a linha:
+a = a*10 + (*s - '0');
+para:
+a = a*base + (*s - '0');
+esse base é o parametro passado na função
 
 2.c)
+agora, a cada caractere há uma verificação para determinar se é um digito ou não:
+if(isdigit(*s) == 0) // é digito
+    a = a*base + (*s - 'a' + 10);
+*s - 'a' serve a mesma lógica do *s - '0', enquanto o +10 serve para ajustar na posição correta na base.
+Por exemplo, o caractere 'b' representa o número 11.
+'b' (98) - 'a' (97) = 1
+1 + 10 = 11
 
+A maior base que podemos representar com esse esquema é a base 36.
 
 EXTRA:
 
 1)
+a função is_little() que escrevi vai pegar o primeiro bite do número 1234. Se a máquina for little-endian, o primeiro bite armazenado (o menos significativo) será o 0xD2, que em decimal é 210. Por isso tem esse if(d == 210).
 
 2)
+a função primeiro procura pela maior potencia da base passada que cabe dentro do numero passado e vai extraindo os números já na ordem correta
+esse loop garante a busca pela potencia:
+while(num > n)
+    n = n * base;
+n = n / base;
+essa última linha garante que a potencia cabe dentro do "num".
+
+Exemplo para num = 511 na base = 8:
+    - O loop multiplica n por 8 até ultrapassar 511: 1 -> 8 -> 64 -> 512
+    - Em seguida, divide por 8: n = 64 (8^2)
+
+O outro while(n > 0) é o que extrai os digitos corretos até acabar as possiveis posições de simbolos.
+int d = num / n; -> garante o valor naquela posicao
+if(d >= 10) -> garante se esse valor deve ser uma letra a-z (para bases maiores que 10) ou números 0-9. O valor é deslocando para a tabela ASCII (subtraindo 10 e somando 'a').
+
+Por exemplo, caso apareça o número 11.
+11 - 10 + 'a' (que vale 97)
+1 + 97 = 98
+'b'= 98
+
+s[i] = c -> coloca o caractere na string
+num = num % n; -> mantém apenas o resto do número
+n = n / base;  -> passa para a próxima posição

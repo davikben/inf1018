@@ -1,14 +1,14 @@
 #include <ctype.h>
 #include <stdio.h>
 
-int dump (void *p, int n) {
+int dump (void *p) {
     unsigned char *p1 = p;
     return *p1;
 }
 
 int is_little(){
     int t = 1234;
-    int d = dump(&t, sizeof(t));
+    int d = dump(&t);
     if(d == 210)
         return 1;
     return 0;
