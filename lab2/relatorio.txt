@@ -98,7 +98,6 @@ a*10 corrige as bases decimais do número
 
 2.b)
 
-
 2.c)
 
 
