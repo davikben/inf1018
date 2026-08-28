@@ -1,0 +1,39 @@
+1.
+para criar uma variável com o byte menos significativo eu fiz uma máscara usando o operador "&".
+Fiz: x & 0x000000FF
+O "&" faz a operação AND bit a bit, então o resultado só é diferente de 0 quando os dois valores que estão sendo comparados não são zero.
+Exemplo: 1 & 1 = 1; 1 & 0 = 0.
+Basicamente só de ter 0 já vira 0.
+Logo, como todos os 3 bytes mais significativos da minha máscara são 0, no novo int eles automaticamente se tornam 0 também.
+
+Já para a segunda parte do exercício utilizei o operador "|".
+Fiz: x | 0xFF000000.
+O "|" faz a operação OR bit a bit, então o resultado só é zero quando os dois valores comparados são zero.
+Exemplo: 1 | 0 = 1; 0 | 0 = 0;
+Basicamente só de ter 1 já vira 1.
+Logo, como F = 1111, ao colocar FF no byte mais significativo e usar |, o bite mais significativo vira FF. Os outros bytes preenchidos com 0 não fazem diferença nenhuma por conta do OR.
+
+2.
+o coração da função tá no while() e no return
+O while() vai rodar enquanto o x ser maior que 0.
+A cada iteração do loop, o número enviado vai ser aplicada uma máscara & com o hex 0x00000001. Como o & apenas resulta em 1 quando os dois bits comparados são 1, se a máscara tiver valor 1 significa que o último bit é 1, aumentando o contador.
+
+No final, 1 bit é deslocado para a direita, preenchendo o bit da esquerda com 0. Dessa maneira, cada bit é comparado.
+
+Após sair do while() vem o return final.
+Como qualquer número impar em binário termina com 1, após aplicar a mesma máscara 0x00000001 com "&", se o número for impar teremos um return 1. Se for par, o return será 0.
+
+3.a)
+criei duas variáveis
+Na primeira eu coloquei o valor de x deslocado 4 bits para a esquerda, preenchendo todos os novos bits com 0.
+Na segunda eu coloquei o valor de x deslocado 4 bits para direita, preenchendo todos os novos bits com 0.
+No final, eu juntei essas duas variáveis com o operador bit a bit |. Assim, o valor só seria 0 se ambos os bits comparados fossem 0. Por fim, retornei essa junção.
+
+3.b)
+Novamente criei duas variáveis.
+Na primeira eu coloquei o valor de x deslocado para a esquerda pelo número de bits que o usuário passou ao chamar a função. Todos os novos bits foram preenchidos com 0. Isso resolve o problema do deslocamento dos bits a direita. Mas como fazer os mais a esquerda rotacionarem?
+
+Eu percebi que a nova posição deles é: tamanho da variável (que é 8) - o número de bits que estão sendo deslocados.
+O resultado dessa subtração é usada para determinar o deslocamento para a direita.
+
+Por fim, ambas novamente são juntadas pelo operador | e retornado o novo valor.
