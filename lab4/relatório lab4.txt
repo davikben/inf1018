@@ -1,0 +1,102 @@
+1)
+Para descobrirmos como esse número está sendo representado na memória:
+    1. Converta o número para binário (Ex.: 150 -> 10010110)
+    2. Separe cada bit de 4 em 4 (ex.: 1001 0110)
+    3. Pegue cada grupo de 4 e converta para hexadecimal.
+        Exemplo:
+        1001 = 9
+        0110 = 6
+    Resposta: 0x96
+
+Para números negativos (ex.: -3)
+    1. Converta o número sem sinal para binário (Ex.: short 3 -> 11)
+    2. Troque todos os 1 por 0 e vice-versa (Ex.: 11 -> 00)
+    3. Adicione 1. (Ex.: 00 + 1 -> 01)
+    4. Descubra o tamanho em bytes da variável declarada (Ex.: short = 2 bytes -> 16 bits)
+    5. Preencha os restantes dos bits por 1 (caso negativo) ou por 0 (caso positivo). Ex.: 01 -> 0000 0000 0000 0001 -> 1111 1111 1111 1101
+    6. Pegue cada grupo de 4 e converta para hexadecimal:
+        1111 = F
+        1101 = D
+    Resposta:
+        Lógico: 0xFFFD
+        Na memória (litte-endian): 0xFDFF
+
+Para o número int i = -151
+    1. 151 -> 10010111
+    2. 1001 0111 -> 0110 1000
+    3. 0110 1000 + 1 = 0110 1001
+    4. int tem 4 bytes
+    5. 1111 1111 1111 1111 1111 1111 0110 1001
+    6.  1111 = F
+        0110 = 6
+        1001 = 9
+    Resposta:
+        Lógico: 0xFFFFFF69
+        Na memória (litte-endian): 0x69FFFFFF
+
+2)
+Para o número short l = -32765:
+    1. 32765 = 0111 1111 1111 1101
+    2. 1000 0000 0000 0010
+    3. 1000 0000 0000 0010 + 1 = 1000 0000 0000 0011
+    4. short tem 2 bytes
+    5. já está no tamanho certo
+    6.  1000 = 8
+        0000 = 0
+        0011 = 3
+    Resposta:
+        Lógica: 0x8003
+        Na memória (litte-endian): 0x0380
+
+Para o número unsigned short k = 32771:
+    1. 32771 = 1000 0000 0000 0011
+    4. short tem 2 bytes
+    5. também já está no tamanho certo
+    6.  1000 = 8
+        0000 = 0
+        0011 = 3
+    Resposta:
+        Lógica: 0x8003
+        Na memória (litte-endian): 0x0380
+
+Sim, ambos tiveram o mesmo resultado. Acontece que variáveis com sinal possuem um intervalo de representação bem menor do que com sinal, pois, além de terem que dividir combinações de 0 e 1 entre positivos e negativos, o último bit é reservado para o sinal (1 para negativo e 0 para positivo).
+Logo, o intervalo para um short com sinal é -32768 até 32767.
+Em comparação, para um short sem sinal é 0 até 65535 (65535 combinações).
+
+Com isso, uma combinação para um short negativo pode ser a mesma para um positivo. Inclusive, se você subtrair seu número negativo com o número total de combinações que o short sem sinal tem, você cicla as combinações e obtem o valor decimal que possui aquela mesma sequência de bits que o seu negativo.
+
+3)
+O código funciona descobrindo quantos bits o programa deve deslocar para deixar o byte menos significativo com os algarismo que o usuário pediu. Para isso, ele multiplica o valor passado por 8 (qtd de bits em 1 byte).
+
+Depois é aplicado uma máscara para verificar se o último byte desse número é 0 ou 1 e assim determinar o sinal.
+0x00000080 usei 8 pois 8 em binário é 1000. Apliquei a operação & pois assim apenas o 1 do 8 é filtrado, já que o resto é tudo 0, o & só resulta 1 quando ambos são 1.
+
+se a máscara resultou em 0x00000080 significa que há sinal e usei o operador | para preencher todos os outros bits com 1.
+caso contrário, usei & novamente para preencher os outros bits com 0.
+
+por fim, retorna.
+
+4)
+como o int é uma variável com sinal, 0xffffffff representa internamente -1 mesmo. Logo, -1 < 2.
+como o unsigned int é uma variável SEM sinal, 0xffffffff representa internamente 4294967295. Logo 4294967295 > 2
+    no printf() aparece -1 pois foi usado %d (que é inteiro com sinal). Para mostrar o 4294967295 deveria ser %u
+mas por que agora tá falando que -1 não é menor que 2 se a variável 0xffffffff tá int (com sinal)? acontece que ao ser comparada com uma variável do tipo unsigned int, a int virou unsigned int também e assumiu o valor 4294967295
+
+5)
+signed char sc = -1;
+1 -> 01
+01 -> 10 + 1 = 11
+char 1 byte
+1111 1111
+0xFF
+
+unsigned int ui = sc;
+int 4 bytes
+Como se trata de um signed char e valor contém sinal, os novos bits serão preenchidos por 1
+1111 1111 1111 1111 1111 1111 | 1111 1111
+(         novos bits        ) | (char original)
+0xFFFFFFFF
+ou seja: 4294967295 em decimal.
+
+Se fosse unsigned ou o valor orignal não contesse sinal, os novos bits seriam preenchidos por 0.
+Se o signed sc = 1, o resultado de unsigned int ui seria 0x00000001
